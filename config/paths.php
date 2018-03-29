@@ -1,5 +1,5 @@
 <?php
-$dir_root = $_SERVER['DOCUMENT_ROOT'] . "/cms/";
+$dir_root = $_SERVER['DOCUMENT_ROOT'] . "/recipe/";
 define("DIR_ROOT", $dir_root);
 
 $incl_path = DIR_ROOT . "include/";
@@ -20,7 +20,7 @@ define("VIEW_PATH", $view_path);
 $lang_path = DIR_ROOT . "lang/";
 define("LANG_PATH", $lang_path);
 
-$url = "http://" . $_SERVER['HTTP_HOST'] . "/cms/";
+$url = "http://" . $_SERVER['HTTP_HOST'] . "/recipe/";
 define("URL", $url);
 
 $link_url = URL;

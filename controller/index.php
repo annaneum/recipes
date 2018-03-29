@@ -8,24 +8,30 @@ class Index extends Controller {
 
 	public function index($sere = array()) {
 		$smth = array("smth" => "ggs", "num2" => "js", "three" => "jj");
-		$sere['GROUPS'] = $this->createAccordionGroups($smth);
-		parent::index($sere);
-	}
-
-	private function createAccordionGroups($group) {
-		$output = "";
+		$sere['MAGAZINE_GROUPS'] = "";
+		$sere['GROUP_GROUPS'] = "";
 		$i = 0;
 
-		foreach ($group as $title => $content) {
-			$sere_collapse['GROUP_TITLE'] = $title;
-			$sere_collapse['GROUP_CONTENT'] = $content;
-			$sere_collapse['GROUP_NR'] = number_to_word($i, "en-US");
-
-			$output .= $this->View->fillTemplate("collapse_group", $sere_collapse);
+		foreach ($smth as $title => $content) {
+			$sere['MAGAZINE_GROUPS'] .= $this->createAccordion($title, $content, $i, 1);
 			$i++;
 		}
 
-		return $output;
+		foreach ($smth as $title => $content) {
+			$sere['GROUP_GROUPS'] .= $this->createAccordion($title, $content, $i, 2);
+			$i++;
+		}
+
+		parent::index($sere);
+	}
+
+	private function createAccordion($title, $content, $id, $parentId) {
+		$sere_collapse['GROUP_TITLE'] = $title;
+		$sere_collapse['GROUP_CONTENT'] = $content;
+		$sere_collapse['GROUP_NR'] = number_to_word($id, "en-US");
+		$sere_collapse['PARENT_NR'] = number_to_word($parentId, "en-US");
+
+		return $this->View->fillTemplate("collapse_group", $sere_collapse);
 	}
 }
 ?>

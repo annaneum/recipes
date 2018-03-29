@@ -2,7 +2,7 @@
 $host = "localhost";
 $username = "root";
 $password = "";
-$db = "cms";
+$db = "recipe";
 
 define("DB_HOST", $host);
 define("DB_USER", $username);

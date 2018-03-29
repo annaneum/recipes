@@ -17,7 +17,7 @@ class Language
 		foreach ($file as $line) {
 			if (trim($line) && substr($line, 0, 2) != "//") {
 				$temp = explode('=', $line);
-				$temp[0] = "LANG:" . rtrim($temp[0], " ");
+				$temp[0] = "LANG:" . strtoupper(rtrim($temp[0], " "));
 				$temp[1] = ltrim($temp[1], " ");
 				$output[$temp[0]] = $temp[1];
 			}
@@ -32,7 +32,7 @@ class Language
 	}
 
 	public function getWord($word) {
-		return $this->text["LANG:" . $word];
+		return $this->text["LANG:" . strtoupper($word)];
 	}
 }
 
