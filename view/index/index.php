@@ -41,3 +41,6 @@
 		</div>
 	</div>
 </div>
+
+[recipe] 
+<a class="btn btn-block" href="{LINK_URL}recipe/show/{RECIPE_ID}">{RECIPE_TITLE}</a>

@@ -4,11 +4,12 @@ class Controller {
     protected $View;
     protected $User;
     protected $input;
-    protected $title = "CMS";
+    protected $title = "Recipes";
     protected $loggedInRequired = true;
     protected $logoutLink = true;
     
     public function __construct($input) {
+        header('Content-type: text/html; charset=utf-8');
         $this->Model    = new Model();
         $this->View     = new View();
         $this->User     = $this->getUser();
@@ -36,8 +37,6 @@ class Controller {
         }
 
         $this->View->setTitle($this->title);
-
-        $this->View->setTemplate(strtolower(get_called_class()));
     }
     
     public function __destruct() {
@@ -48,17 +47,28 @@ class Controller {
         if (isset($_SESSION['user']) && $_SESSION['user'] != false) {
             return new User($_SESSION['user']);
         } else {
-            return false;
+            return null;
         }
     }
 
     public function checkLogin() {
-        if ($this->User === false) {
+        if ($this->User === NULL) {
             header("location:" . LINK_URL . "login");
         }
     }
 
+    public function checkLoggedIn() {
+        if (is_object($this->User)) {
+            header("location:" . LINK_URL . "index");
+        }
+    }
+
     public function index($sere = array()) {
+        $this->View->setTemplate(strtolower(get_called_class()));
+        $this->setMainContent($sere);
+    }
+
+    protected function setMainContent($sere) {
         $content = $this->View->fillTemplate("main", $sere);
         $this->View->setContent($content);
     }

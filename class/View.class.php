@@ -34,6 +34,10 @@ class View {
             die("Error loading template file ($this->templateFile).");
         }
     }
+
+    public function templateIsSet() {
+        return $this->templateFile != null;
+    }
     
     public function fillTemplate($area, $values = array(), $template = null) {
         $string = file_get_contents(($template == null) ? $this->templateFile : $template);

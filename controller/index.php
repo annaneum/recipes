@@ -7,18 +7,48 @@ class Index extends Controller {
 	}
 
 	public function index($sere = array()) {
-		$smth = array("smth" => "ggs", "num2" => "js", "three" => "jj");
+		$this->View->setTemplate("index");
+
 		$sere['MAGAZINE_GROUPS'] = "";
 		$sere['GROUP_GROUPS'] = "";
 		$i = 0;
 
-		foreach ($smth as $title => $content) {
-			$sere['MAGAZINE_GROUPS'] .= $this->createAccordion($title, $content, $i, 1);
+
+		//-----magazines-----
+		//get magazines
+		$magazines = $this->Model->getMagazines();
+		
+		//display magazines
+		foreach ($magazines as $magazine) {
+			$content = "";
+			//get recipes
+			$recipes = $this->Model->getRecipesOfMagazine($magazine['ID']);
+			//display recipes
+			foreach ($recipes as $recipe) {
+				$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
+				$sere_recipe["RECIPE_ID"] = $recipe['ID'];
+				$content .= $this->View->fillTemplate("recipe", $sere_recipe);
+
+			}
+			$sere['MAGAZINE_GROUPS'] .= $this->createAccordion($magazine['title'], $content, $i, 1);
 			$i++;
 		}
 
-		foreach ($smth as $title => $content) {
-			$sere['GROUP_GROUPS'] .= $this->createAccordion($title, $content, $i, 2);
+		//-----groups-----
+		//get groups
+		$groups = $this->Model->getGroups();
+
+		//display groups
+		foreach ($groups as $group) {
+			$content = "";
+			//get recipes
+			$recipes = $this->Model->getRecipesOfGroup($group['ID']);
+			//display recipes
+			foreach ($recipes as $recipe) {
+				$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
+				$content .= $this->View->fillTemplate("recipe", $sere_recipe);
+			}
+			$sere['GROUP_GROUPS'] .= $this->createAccordion($group['title'], $content, $i, 2);
 			$i++;
 		}
 

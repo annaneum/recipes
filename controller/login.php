@@ -6,6 +6,7 @@ class Login extends Controller {
 
 	function __construct($input) {
 		parent::__construct($input);
+		$this->checkLoggedIn();
 	}
 
 	public function index($sere = array()) {
