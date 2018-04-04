@@ -5,7 +5,7 @@ class Recipe extends Controller {
 	}
 
 	public function show($id) {
-		$this->View->setTemplate("recipe", "show");
+		$this->View->setView("recipe", "show");
 
 		$recipe = $this->Model->getRecipe($id);
 		$sere["RECIPE_TITLE"] = $recipe['title'];

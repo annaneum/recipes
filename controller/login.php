@@ -19,7 +19,7 @@ class Login extends Controller {
 			header("location:" . LINK_URL . "index");
 		} else {
 			$sere_msg['MSG_TEXT'] = "Username oder Passwort stimmt nicht.";
-			$sere['MSG'] = $this->View->fillTemplate("msg", $sere_msg);
+			$sere['MSG'] = $this->View->fillView("msg", $sere_msg);
 			parent::index($sere);
 		}
 	}

@@ -7,7 +7,7 @@ class Index extends Controller {
 	}
 
 	public function index($sere = array()) {
-		$this->View->setTemplate("index");
+		$this->View->setView("index");
 
 		$sere['MAGAZINE_GROUPS'] = "";
 		$sere['GROUP_GROUPS'] = "";
@@ -17,40 +17,56 @@ class Index extends Controller {
 		//-----magazines-----
 		//get magazines
 		$magazines = $this->Model->getMagazines();
-		
-		//display magazines
+
 		foreach ($magazines as $magazine) {
-			$content = "";
+			$acc[$i]["title"] = $magazine['title'];
+			$acc[$i]['content'] = "";
 			//get recipes
 			$recipes = $this->Model->getRecipesOfMagazine($magazine['ID']);
 			//display recipes
 			foreach ($recipes as $recipe) {
 				$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
 				$sere_recipe["RECIPE_ID"] = $recipe['ID'];
-				$content .= $this->View->fillTemplate("recipe", $sere_recipe);
-
+				$acc[$i]['content'] .= $this->View->fillView("recipe", $sere_recipe);
 			}
-			$sere['MAGAZINE_GROUPS'] .= $this->createAccordion($magazine['title'], $content, $i, 1);
 			$i++;
 		}
+		$sere['MAGAZINES'] = $this->View->createAccordion($acc, 1);
+		
+		//display magazines
+		// $i = 0;
+		// foreach ($magazines as $magazine) {
+		// 	$content = "";
+		// 	//get recipes
+		// 	$recipes = $this->Model->getRecipesOfMagazine($magazine['ID']);
+		// 	//display recipes
+		// 	foreach ($recipes as $recipe) {
+		// 		$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
+		// 		$sere_recipe["RECIPE_ID"] = $recipe['ID'];
+		// 		$content .= $this->View->fillView("recipe", $sere_recipe);
 
-		//-----groups-----
-		//get groups
-		$groups = $this->Model->getGroups();
+		// 	}
+		// 	$sere['MAGAZINE_GROUPS'] .= $this->createAccordion($magazine['title'], $content, $i, 1);
+		// 	$i++;
+		// }
 
-		//display groups
-		foreach ($groups as $group) {
-			$content = "";
-			//get recipes
-			$recipes = $this->Model->getRecipesOfGroup($group['ID']);
-			//display recipes
-			foreach ($recipes as $recipe) {
-				$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
-				$content .= $this->View->fillTemplate("recipe", $sere_recipe);
-			}
-			$sere['GROUP_GROUPS'] .= $this->createAccordion($group['title'], $content, $i, 2);
-			$i++;
-		}
+		// //-----groups-----
+		// //get groups
+		// $groups = $this->Model->getGroups();
+
+		// //display groups
+		// foreach ($groups as $group) {
+		// 	$content = "";
+		// 	//get recipes
+		// 	$recipes = $this->Model->getRecipesOfGroup($group['ID']);
+		// 	//display recipes
+		// 	foreach ($recipes as $recipe) {
+		// 		$sere_recipe["RECIPE_TITLE"] = $recipe['title'];
+		// 		$content .= $this->View->fillView("recipe", $sere_recipe);
+		// 	}
+		// 	$sere['GROUP_GROUPS'] .= $this->createAccordion($group['title'], $content, $i, 2);
+		// 	$i++;
+		// }
 
 		parent::index($sere);
 	}
@@ -61,7 +77,7 @@ class Index extends Controller {
 		$sere_collapse['GROUP_NR'] = number_to_word($id, "en-US");
 		$sere_collapse['PARENT_NR'] = number_to_word($parentId, "en-US");
 
-		return $this->View->fillTemplate("collapse_group", $sere_collapse);
+		return $this->View->fillView("collapse_group", $sere_collapse);
 	}
 }
 ?>

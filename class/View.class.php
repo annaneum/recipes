@@ -1,10 +1,12 @@
 <?php 
 class View {    
-    private $templateFile = null;
+    private $viewFile = null;
 
-    private $templateMain = null;
+    private $viewMain = null;
 
-    private $templateNav = null;
+    private $viewNav = null;
+
+    private $viewTemplate = null;
     
     private $title = null;
     
@@ -24,23 +26,24 @@ class View {
     
     function __construct() {
         $this->Lang = new Language("de");
-        $this->templateMain = VIEW_PATH . "index.php";
-        $this->templateNav = VIEW_PATH . "navigation.php";
+        $this->viewMain = VIEW_PATH . "index.php";
+        $this->viewNav = VIEW_PATH . "navigation.php";
+        $this->viewTemplate = VIEW_PATH . "template.php";
     }
     
-    public function setTemplate($page, $file="index") {
-        $this->templateFile = VIEW_PATH . $page . "/" . $file . ".php";
-        if (! file_exists($this->templateFile)) {
-            die("Error loading template file ($this->templateFile).");
+    public function setView($page, $file="index") {
+        $this->viewFile = VIEW_PATH . $page . "/" . $file . ".php";
+        if (! file_exists($this->viewFile)) {
+            die("Error loading view file ($this->viewFile).");
         }
     }
 
-    public function templateIsSet() {
-        return $this->templateFile != null;
+    public function viewIsSet() {
+        return $this->viewFile != null;
     }
     
-    public function fillTemplate($area, $values = array(), $template = null) {
-        $string = file_get_contents(($template == null) ? $this->templateFile : $template);
+    public function fillView($area, $values = array(), $view = null) {
+        $string = file_get_contents(($view == null) ? $this->viewFile : $view);
         
         $string = str_replace(array(
             "\r",
@@ -80,12 +83,12 @@ class View {
     
     public function addCSS($CSSFile, $url = false) {
         $sere_css['CSS_FILE'] = ($url) ? $CSSFile : URL . "public/css/" . $CSSFile . ".css";
-        $this->css .= $this->fillTemplate("css", $sere_css, $this->templateMain);
+        $this->css .= $this->fillView("css", $sere_css, $this->viewMain);
     }
     
     public function addJS($JSFile, $url = false) {
         $sere_js['JS_FILE'] = ($url) ? $JSFile : URL . "public/js/" . $JSFile . ".js";
-        $this->js .= $this->fillTemplate("js", $sere_js, $this->templateMain);
+        $this->js .= $this->fillView("js", $sere_js, $this->viewMain);
     }
     
     public function setContent($content) {
@@ -107,7 +110,7 @@ class View {
         $sere_main["CONTENT"] = $this->content;
         $sere_main['JS'] = $this->js;
         
-        return $this->fillTemplate("main", $sere_main, $this->templateMain);
+        return $this->fillView("main", $sere_main, $this->viewMain);
     }
 
     public function addMenuPoint($text, $link) {
@@ -132,7 +135,7 @@ class View {
         $sere_menu_point['ACTIVE'] = ($active) ? "active" : "";
         $sere_menu_point['LINK'] = $link;
         $sere_menu_point['TEXT'] = $this->Lang->getWord($text);
-        return $this->fillTemplate("menu_point", $sere_menu_point, $this->templateNav);
+        return $this->fillView("menu_point", $sere_menu_point, $this->viewNav);
     }
 
     private function getNav() {
@@ -151,7 +154,29 @@ class View {
             $sere_main['MENU_RIGHT_POINTS'] .= $this->getMenuPoint($this->nav_right[$i]['text'], $this->nav_right[$i]['link']);
         }
         
-        return $this->fillTemplate("main", $sere_main, $this->templateNav);
+        return $this->fillView("main", $sere_main, $this->viewNav);
+    }
+
+    public function getTemplate($type, $content = array()) {
+        return $this->fillView(strtolower($type), $content, $this->viewTemplate);
+    }
+
+    public function createAccordion($content, $nr = 0) {
+        $type = "accordion";
+        $element_type = "accordion_element";
+        $sere['ACCORDION_ELEMENTS'] = "";
+        $sere['ACC_NR'] = number_to_word($nr);
+        $i = 1;
+        foreach($content as $element) {
+            $sere_element = array();
+            $sere_element['ELEMENT_NR'] = number_to_word($i);
+            $sere_element['ELEMENT_TITLE'] = $element['title'];
+            $sere_element['ELEMENT_CONTENT'] = $element['content'];
+            $sere_element['ACC_NR'] = number_to_word($nr);
+            $sere['ACCORDION_ELEMENTS'] .= $this->getTemplate($element_type, $sere_element);
+            $i++;
+        }
+        return $this->getTemplate($type, $sere);
     }
 }
 

@@ -12,17 +12,15 @@
 	</div>
 	<div class="tab-content">
 		<div class="card-body tab-pane fade in active show" id="magazine-collapse">
-			<div class="accordion" id="accordionone">
-				{MAGAZINE_GROUPS}
-			</div>
+			{MAGAZINES}
 		</div>
 		<div class="card-body tab-pane fade" id="group-collapse">
-			<div class="accordion" id="accordiontwo">
-				{GROUP_GROUPS}
-			</div>
+			{GROUPS}
 		</div>
 	</div>
 </div>
+
+
 
 
 

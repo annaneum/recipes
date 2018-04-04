@@ -64,12 +64,12 @@ class Controller {
     }
 
     public function index($sere = array()) {
-        $this->View->setTemplate(strtolower(get_called_class()));
+        $this->View->setView(strtolower(get_called_class()));
         $this->setMainContent($sere);
     }
 
     protected function setMainContent($sere) {
-        $content = $this->View->fillTemplate("main", $sere);
+        $content = $this->View->fillView("main", $sere);
         $this->View->setContent($content);
     }
 }
